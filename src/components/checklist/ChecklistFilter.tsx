@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, Filter } from 'lucide-react';
+import { Search, Plus, Filter, X } from 'lucide-react';
 import { useChecklist } from '@/context/ChecklistContext';
 import { 
   Popover, 
