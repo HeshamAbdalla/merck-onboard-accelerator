@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { FileText, FilePdf, Download, BookOpen } from 'lucide-react';
+import { FileText, File, Download, BookOpen } from 'lucide-react';
 import { useChecklist } from '@/context/ChecklistContext';
 
 // Mock resource data for demonstration
@@ -16,7 +15,7 @@ const resources = {
       type: "PDF",
       size: "2.4 MB",
       lastUpdated: "2025-04-15",
-      icon: FilePdf,
+      icon: File,
       badgeText: "Essential"
     },
     {
@@ -34,7 +33,7 @@ const resources = {
       type: "PDF",
       size: "0.8 MB",
       lastUpdated: "2025-04-05",
-      icon: FilePdf,
+      icon: File,
       badgeText: ""
     },
     {
@@ -43,7 +42,7 @@ const resources = {
       type: "PDF",
       size: "3.5 MB",
       lastUpdated: "2025-03-28",
-      icon: FilePdf,
+      icon: File,
       badgeText: "Manager"
     }
   ],
@@ -63,7 +62,7 @@ const resources = {
       type: "PDF",
       size: "2.8 MB",
       lastUpdated: "2025-04-08",
-      icon: FilePdf,
+      icon: File,
       badgeText: "Essential"
     },
     {
@@ -81,7 +80,7 @@ const resources = {
       type: "PDF",
       size: "1.1 MB",
       lastUpdated: "2025-03-25",
-      icon: FilePdf,
+      icon: File,
       badgeText: ""
     }
   ],
@@ -101,7 +100,7 @@ const resources = {
       type: "PDF",
       size: "3.7 MB",
       lastUpdated: "2025-04-07",
-      icon: FilePdf,
+      icon: File,
       badgeText: "Manager"
     },
     {
@@ -119,7 +118,7 @@ const resources = {
       type: "PDF",
       size: "2.2 MB",
       lastUpdated: "2025-03-22",
-      icon: FilePdf,
+      icon: File,
       badgeText: "All Staff"
     }
   ]
