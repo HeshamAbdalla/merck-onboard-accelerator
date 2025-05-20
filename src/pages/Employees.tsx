@@ -9,7 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useChecklist } from '@/context/ChecklistContext';
 
-// Mock employees data for demonstration
+// Extended mock employees data with manager information
 const employees = [
   {
     id: "1",
@@ -18,6 +18,7 @@ const employees = [
     startDate: "2025-06-01",
     status: "In Progress",
     progress: 35,
+    manager: "Sarah Miller"
   },
   {
     id: "2",
@@ -26,6 +27,7 @@ const employees = [
     startDate: "2025-05-15",
     status: "Not Started",
     progress: 0,
+    manager: "Sarah Miller"
   },
   {
     id: "3",
@@ -34,6 +36,7 @@ const employees = [
     startDate: "2025-06-15",
     status: "In Progress",
     progress: 72,
+    manager: "Robert Chen"
   },
   {
     id: "4",
@@ -42,6 +45,7 @@ const employees = [
     startDate: "2025-05-01",
     status: "Completed",
     progress: 100,
+    manager: "Sarah Miller"
   },
   {
     id: "5",
@@ -50,18 +54,43 @@ const employees = [
     startDate: "2025-07-01",
     status: "Not Started",
     progress: 0,
+    manager: "Robert Chen"
   }
 ];
 
+// Mock managers data
+const managers = [
+  { id: "1", name: "Sarah Miller" },
+  { id: "2", name: "Robert Chen" },
+  { id: "3", name: "Ana Rodriguez" }
+];
+
+// For demo purposes, we'll use a hardcoded current manager
+const currentManager = "Sarah Miller";
+
 const Employees: React.FC = () => {
   const { currentRole } = useChecklist();
+  
+  // Filter employees based on role and current manager
+  const filteredEmployees = React.useMemo(() => {
+    if (currentRole === "HR Admin") {
+      return employees; // HR Admins see all employees
+    } else if (currentRole === "Manager") {
+      return employees.filter(emp => emp.manager === currentManager);
+    }
+    return employees; // Default fallback
+  }, [currentRole]);
 
   return (
     <div>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-merck-purple-dark">Employees</h1>
-          <p className="text-gray-500">Manage onboarding progress for new hires</p>
+          <h1 className="text-2xl font-bold text-merck-primary-dark">My Employees</h1>
+          {currentRole === "Manager" ? (
+            <p className="text-gray-500">Manage onboarding progress for {currentManager}'s team</p>
+          ) : (
+            <p className="text-gray-500">Manage onboarding progress across all teams</p>
+          )}
         </div>
         <Button className="mt-4 md:mt-0">Add New Employee</Button>
       </div>
@@ -89,29 +118,52 @@ const Employees: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="start-date">Start Date</SelectItem>
-                  <SelectItem value="progress">Progress</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            {currentRole === "HR Admin" && (
+              <div>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Manager" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Managers</SelectItem>
+                    {managers.map(manager => (
+                      <SelectItem key={manager.id} value={manager.id}>{manager.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            {currentRole !== "HR Admin" && (
+              <div>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="name">Name</SelectItem>
+                    <SelectItem value="start-date">Start Date</SelectItem>
+                    <SelectItem value="progress">Progress</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Employee Onboarding Status</CardTitle>
+          <CardTitle>
+            {currentRole === "Manager" 
+              ? `My Employee Onboarding Status` 
+              : "Employee Onboarding Status"}
+          </CardTitle>
           <CardDescription>
-            {currentRole === 'HR Admin' 
-              ? 'Overview of all employee onboarding progress' 
-              : 'Your team member onboarding progress'}
+            {currentRole === "Manager" 
+              ? `Tracking onboarding progress for ${currentManager}'s team members` 
+              : currentRole === "HR Admin" 
+                ? 'Overview of all employee onboarding progress across departments' 
+                : 'Your team member onboarding progress'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -121,17 +173,19 @@ const Employees: React.FC = () => {
                 <TableHead>Name</TableHead>
                 <TableHead>Position</TableHead>
                 <TableHead>Start Date</TableHead>
+                {currentRole === "HR Admin" && <TableHead>Manager</TableHead>}
                 <TableHead>Status</TableHead>
                 <TableHead>Progress</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {employees.map((employee) => (
+              {filteredEmployees.map((employee) => (
                 <TableRow key={employee.id}>
                   <TableCell className="font-medium">{employee.name}</TableCell>
                   <TableCell>{employee.position}</TableCell>
                   <TableCell>{new Date(employee.startDate).toLocaleDateString()}</TableCell>
+                  {currentRole === "HR Admin" && <TableCell>{employee.manager}</TableCell>}
                   <TableCell>
                     <Badge
                       className={`

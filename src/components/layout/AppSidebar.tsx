@@ -64,7 +64,7 @@ const AppSidebar = () => {
                   }`
                 }>
                   <Users className="h-4 w-4" />
-                  <span>Employees</span>
+                  <span>My Employees</span>
                 </NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
