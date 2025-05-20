@@ -76,7 +76,7 @@ const AppSidebar = () => {
                   }`
                 }>
                   <FileText className="h-4 w-4" />
-                  <span>Templates</span>
+                  <span>Resources</span>
                 </NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
