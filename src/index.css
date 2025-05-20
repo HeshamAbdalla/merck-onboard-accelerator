@@ -84,6 +84,14 @@
   body {
     @apply bg-background text-foreground font-intervention;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-intervention font-bold;
+  }
+
+  button, input, select, textarea {
+    @apply font-intervention;
+  }
 }
 
 /* Adding Intervention font */
@@ -101,4 +109,23 @@
   font-weight: 700;
   font-style: normal;
   font-display: swap;
+}
+
+/* Merck-specific utility classes */
+@layer utilities {
+  .bg-merck-gradient {
+    @apply bg-gradient-to-r from-merck-purple to-merck-purple-light;
+  }
+  
+  .text-merck-gradient {
+    @apply bg-gradient-to-r from-merck-purple to-merck-purple-light bg-clip-text text-transparent;
+  }
+  
+  .btn-merck {
+    @apply bg-merck-purple hover:bg-merck-purple-dark text-white transition-colors;
+  }
+  
+  .btn-merck-outline {
+    @apply border border-merck-purple text-merck-purple hover:bg-merck-purple/10 transition-colors;
+  }
 }

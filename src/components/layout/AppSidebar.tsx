@@ -3,7 +3,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useChecklist } from '@/context/ChecklistContext';
 import { Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
 import { 
   CheckSquare, 
   Users, 
@@ -17,16 +16,16 @@ const AppSidebar = () => {
   const { currentRole, setCurrentRole } = useChecklist();
 
   return (
-    <Sidebar>
+    <Sidebar className="bg-merck-gray-light border-r border-gray-200">
       <SidebarContent>
         <div className="px-3 pt-4 pb-6">
-          <h2 className="text-xl font-bold text-merck-purple mb-2">Merck Onboarding</h2>
+          <h2 className="text-xl font-bold text-merck-purple-dark mb-2 font-intervention">Merck Onboarding</h2>
           <div className="mb-4">
             <Select
               value={currentRole}
               onValueChange={(value: UserRole) => setCurrentRole(value)}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full border-merck-purple/30 focus:ring-merck-purple/50">
                 <SelectValue placeholder="Select role" />
               </SelectTrigger>
               <SelectContent>
@@ -36,13 +35,13 @@ const AppSidebar = () => {
               </SelectContent>
             </Select>
           </div>
-          <h3 className="text-xs uppercase text-gray-500 font-medium mb-2">Main Navigation</h3>
+          <h3 className="text-xs uppercase text-gray-500 font-medium mb-2 font-intervention">Main Navigation</h3>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <NavLink to="/" className={({ isActive }) => 
-                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-gray-100'
+                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/10 text-merck-purple-darker'
                   }`
                 }>
                   <CheckSquare className="h-4 w-4" />
@@ -53,8 +52,8 @@ const AppSidebar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <NavLink to="/employees" className={({ isActive }) => 
-                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-gray-100'
+                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/10 text-merck-purple-darker'
                   }`
                 }>
                   <Users className="h-4 w-4" />
@@ -65,8 +64,8 @@ const AppSidebar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <NavLink to="/templates" className={({ isActive }) => 
-                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-gray-100'
+                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/10 text-merck-purple-darker'
                   }`
                 }>
                   <FileText className="h-4 w-4" />
