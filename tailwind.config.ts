@@ -63,17 +63,21 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-        // Merck colors
+        // Updated Merck colors to match merck.com
         merck: {
           purple: {
-            light: '#9b87f5',
-            DEFAULT: '#7E69AB',
-            dark: '#6E59A5',
+            light: '#a288f9', // Lighter purple
+            DEFAULT: '#6A56A5', // Primary Merck purple
+            dark: '#583e8e', // Darker purple for hover states
             darker: '#1A1F2C',
           },
           gray: {
-            DEFAULT: '#8E9196',
-            light: '#f8f9fa',
+            DEFAULT: '#71767c', // Matches Merck.com text color
+            light: '#f9f9fa', // Light background color
+          },
+          blue: {
+            DEFAULT: '#009FDA', // Merck blue accent color
+            dark: '#0085bb',
           }
         }
 			},

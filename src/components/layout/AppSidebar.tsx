@@ -16,16 +16,22 @@ const AppSidebar = () => {
   const { currentRole, setCurrentRole } = useChecklist();
 
   return (
-    <Sidebar className="bg-merck-gray-light border-r border-gray-200">
+    <Sidebar className="bg-white border-r border-gray-100 shadow-sm">
       <SidebarContent>
         <div className="px-3 pt-4 pb-6">
-          <h2 className="text-xl font-bold text-merck-purple-dark mb-2 font-intervention">Merck Onboarding</h2>
-          <div className="mb-4">
+          <div className="flex items-center mb-6">
+            <div className="w-10 h-10 bg-merck-purple rounded-sm flex items-center justify-center mr-2">
+              <span className="text-white font-bold text-lg">M</span>
+            </div>
+            <h2 className="text-xl font-bold text-merck-purple-dark font-intervention">Merck Onboarding</h2>
+          </div>
+          
+          <div className="mb-6">
             <Select
               value={currentRole}
               onValueChange={(value: UserRole) => setCurrentRole(value)}
             >
-              <SelectTrigger className="w-full border-merck-purple/30 focus:ring-merck-purple/50">
+              <SelectTrigger className="w-full border-merck-purple/30 focus:ring-merck-purple/50 rounded-sm">
                 <SelectValue placeholder="Select role" />
               </SelectTrigger>
               <SelectContent>
@@ -35,13 +41,14 @@ const AppSidebar = () => {
               </SelectContent>
             </Select>
           </div>
-          <h3 className="text-xs uppercase text-gray-500 font-medium mb-2 font-intervention">Main Navigation</h3>
+          
+          <h3 className="text-xs uppercase text-gray-500 font-medium mb-3 tracking-wider font-intervention">Main Navigation</h3>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <NavLink to="/" className={({ isActive }) => 
-                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/10 text-merck-purple-darker'
+                  `flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium ${
+                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/5 text-merck-purple-dark'
                   }`
                 }>
                   <CheckSquare className="h-4 w-4" />
@@ -52,8 +59,8 @@ const AppSidebar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <NavLink to="/employees" className={({ isActive }) => 
-                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/10 text-merck-purple-darker'
+                  `flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium ${
+                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/5 text-merck-purple-dark'
                   }`
                 }>
                   <Users className="h-4 w-4" />
@@ -64,8 +71,8 @@ const AppSidebar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <NavLink to="/templates" className={({ isActive }) => 
-                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/10 text-merck-purple-darker'
+                  `flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium ${
+                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/5 text-merck-purple-dark'
                   }`
                 }>
                   <FileText className="h-4 w-4" />
@@ -74,6 +81,16 @@ const AppSidebar = () => {
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
+          
+          {/* Merck.com-inspired footer */}
+          <div className="absolute bottom-4 left-0 right-0 px-3">
+            <div className="border-t border-gray-100 pt-4 mt-2">
+              <div className="flex items-center text-xs text-gray-500">
+                <div className="mr-3">© {new Date().getFullYear()} Merck</div>
+                <div>All rights reserved</div>
+              </div>
+            </div>
+          </div>
         </div>
       </SidebarContent>
     </Sidebar>
