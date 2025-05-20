@@ -49,7 +49,7 @@ const ChecklistCard: React.FC<ChecklistCardProps> = ({ item }) => {
     <Card className={`transition-all duration-200 border-l-4 ${
       item.completed 
         ? 'border-l-green-500 bg-green-50' 
-        : 'border-l-merck-purple hover:shadow-md'
+        : 'border-l-merck-primary hover:shadow-md'
     }`}>
       <CardHeader className="pb-2 flex flex-row items-start justify-between">
         <div className="flex items-start gap-2">
@@ -100,7 +100,7 @@ const ChecklistCard: React.FC<ChecklistCardProps> = ({ item }) => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2 mt-1 mb-3">
-          <Badge variant="outline" className="bg-merck-purple-light bg-opacity-10 text-merck-purple">
+          <Badge variant="outline" className="bg-merck-primary-light bg-opacity-10 text-merck-primary">
             {item.phase}
           </Badge>
           <Badge variant="outline" className="bg-gray-100">

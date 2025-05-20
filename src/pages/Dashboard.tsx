@@ -52,11 +52,11 @@ const Dashboard: React.FC = () => {
         <div className="mt-6 mb-2">
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-sm font-medium text-gray-700">Overall Progress</h3>
-            <span className="text-sm font-medium text-merck-purple">{overallProgress}%</span>
+            <span className="text-sm font-medium text-merck-primary">{overallProgress}%</span>
           </div>
           <div className="w-full bg-gray-100 rounded-full h-2">
             <div 
-              className="bg-merck-purple h-2 rounded-full transition-all duration-500 ease-in-out" 
+              className="bg-merck-primary h-2 rounded-full transition-all duration-500 ease-in-out" 
               style={{ width: `${overallProgress}%` }}
             ></div>
           </div>
@@ -69,7 +69,7 @@ const Dashboard: React.FC = () => {
       
       {filteredChecklist.length === 0 ? (
         <div className="text-center py-10 bg-white p-6 rounded-md border border-gray-100 shadow-sm">
-          <h3 className="text-xl font-semibold mb-2 text-merck-purple-dark">No tasks match your filters</h3>
+          <h3 className="text-xl font-semibold mb-2 text-gray-800">No tasks match your filters</h3>
           <p className="text-gray-500">Try adjusting your filters or search term</p>
         </div>
       ) : (

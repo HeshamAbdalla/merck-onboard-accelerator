@@ -28,7 +28,7 @@ const DashboardHeader: React.FC = () => {
     <div className="mb-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-merck-purple-dark">
+          <h1 className="text-2xl font-bold text-gray-800">
             Onboarding Checklist {currentRole === 'HR Admin' ? 'Templates' : 'Dashboard'}
           </h1>
           <p className="text-gray-500">
@@ -37,7 +37,7 @@ const DashboardHeader: React.FC = () => {
               : 'Track and manage onboarding tasks for new employees'}
           </p>
         </div>
-        <Badge className="mt-2 md:mt-0 bg-merck-purple text-white py-1 px-3 text-sm">
+        <Badge className="mt-2 md:mt-0 bg-merck-primary text-white py-1 px-3 text-sm">
           {currentRole}
         </Badge>
       </div>
@@ -45,14 +45,14 @@ const DashboardHeader: React.FC = () => {
       <div className="bg-white p-4 rounded-lg shadow-sm border mb-6">
         <div className="flex flex-col sm:flex-row justify-between mb-2">
           <h3 className="text-lg font-medium">Overall Progress</h3>
-          <p className="text-lg font-bold text-merck-purple">{progressPercentage}% Complete</p>
+          <p className="text-lg font-bold text-merck-primary">{progressPercentage}% Complete</p>
         </div>
         <Progress value={progressPercentage} className="h-2.5" />
         
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-gray-50 p-3 rounded-md">
             <p className="text-sm text-gray-600">Total Tasks</p>
-            <p className="text-2xl font-bold text-merck-purple-dark">{totalTasks}</p>
+            <p className="text-2xl font-bold text-gray-800">{totalTasks}</p>
           </div>
           <div className="bg-green-50 p-3 rounded-md">
             <p className="text-sm text-gray-600">Completed</p>
@@ -62,9 +62,9 @@ const DashboardHeader: React.FC = () => {
             <p className="text-sm text-gray-600">In Progress</p>
             <p className="text-2xl font-bold text-amber-600">{totalTasks - completedTasks}</p>
           </div>
-          <div className="bg-purple-50 p-3 rounded-md">
+          <div className="bg-merck-primary bg-opacity-10 p-3 rounded-md">
             <p className="text-sm text-gray-600">Phases</p>
-            <p className="text-2xl font-bold text-purple-600">{Object.keys(tasksByPhase).length}</p>
+            <p className="text-2xl font-bold text-merck-primary">{Object.keys(tasksByPhase).length}</p>
           </div>
         </div>
       </div>

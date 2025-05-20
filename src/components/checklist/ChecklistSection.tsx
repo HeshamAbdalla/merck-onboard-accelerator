@@ -24,7 +24,7 @@ const ChecklistSection: React.FC<ChecklistSectionProps> = ({ phase, items }) => 
     <section className="mb-8">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-semibold text-merck-purple-dark">{phase}</h2>
+          <h2 className="text-xl font-semibold text-gray-800">{phase}</h2>
           <Badge variant="outline" className="ml-2 text-sm bg-gray-100">
             {completedCount}/{totalCount} tasks
           </Badge>
@@ -40,7 +40,7 @@ const ChecklistSection: React.FC<ChecklistSectionProps> = ({ phase, items }) => 
       {/* Progress bar */}
       <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
         <div 
-          className="bg-merck-purple h-2.5 rounded-full transition-all duration-500 ease-in-out" 
+          className="bg-merck-primary h-2.5 rounded-full transition-all duration-500 ease-in-out" 
           style={{ width: `${progressPercentage}%` }}
         ></div>
       </div>

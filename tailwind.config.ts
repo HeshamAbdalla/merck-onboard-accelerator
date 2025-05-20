@@ -63,12 +63,17 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-        // Updated Merck colors to match merck.com
+        // Updated Merck colors with primary #00857c
         merck: {
+          primary: {
+            light: '#16a99e', // Lighter teal
+            DEFAULT: '#00857c', // Primary Merck color
+            dark: '#006a62', // Darker teal for hover states
+          },
           purple: {
             light: '#a288f9', // Lighter purple
-            DEFAULT: '#6A56A5', // Primary Merck purple
-            dark: '#583e8e', // Darker purple for hover states
+            DEFAULT: '#6A56A5', // Purple
+            dark: '#583e8e', // Darker purple
             darker: '#1A1F2C',
           },
           gray: {
@@ -115,3 +120,4 @@ export default {
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+

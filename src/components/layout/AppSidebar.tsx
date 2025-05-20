@@ -20,10 +20,10 @@ const AppSidebar = () => {
       <SidebarContent>
         <div className="px-3 pt-4 pb-6">
           <div className="flex items-center mb-6">
-            <div className="w-10 h-10 bg-merck-purple rounded-sm flex items-center justify-center mr-2">
+            <div className="w-10 h-10 bg-merck-primary rounded-sm flex items-center justify-center mr-2">
               <span className="text-white font-bold text-lg">M</span>
             </div>
-            <h2 className="text-xl font-bold text-merck-purple-dark font-intervention">Merck Onboarding</h2>
+            <h2 className="text-xl font-bold text-merck-primary-dark font-intervention">Merck Onboarding</h2>
           </div>
           
           <div className="mb-6">
@@ -31,7 +31,7 @@ const AppSidebar = () => {
               value={currentRole}
               onValueChange={(value: UserRole) => setCurrentRole(value)}
             >
-              <SelectTrigger className="w-full border-merck-purple/30 focus:ring-merck-purple/50 rounded-sm">
+              <SelectTrigger className="w-full border-merck-primary/30 focus:ring-merck-primary/50 rounded-sm">
                 <SelectValue placeholder="Select role" />
               </SelectTrigger>
               <SelectContent>
@@ -48,7 +48,7 @@ const AppSidebar = () => {
               <SidebarMenuButton asChild>
                 <NavLink to="/" className={({ isActive }) => 
                   `flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/5 text-merck-purple-dark'
+                    isActive ? 'bg-merck-primary text-white' : 'hover:bg-merck-primary/5 text-gray-700'
                   }`
                 }>
                   <CheckSquare className="h-4 w-4" />
@@ -60,7 +60,7 @@ const AppSidebar = () => {
               <SidebarMenuButton asChild>
                 <NavLink to="/employees" className={({ isActive }) => 
                   `flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/5 text-merck-purple-dark'
+                    isActive ? 'bg-merck-primary text-white' : 'hover:bg-merck-primary/5 text-gray-700'
                   }`
                 }>
                   <Users className="h-4 w-4" />
@@ -72,7 +72,7 @@ const AppSidebar = () => {
               <SidebarMenuButton asChild>
                 <NavLink to="/templates" className={({ isActive }) => 
                   `flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium ${
-                    isActive ? 'bg-merck-purple text-white' : 'hover:bg-merck-purple/5 text-merck-purple-dark'
+                    isActive ? 'bg-merck-primary text-white' : 'hover:bg-merck-primary/5 text-gray-700'
                   }`
                 }>
                   <FileText className="h-4 w-4" />
