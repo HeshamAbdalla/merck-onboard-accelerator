@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -6,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Download, FileSpreadsheet } from 'lucide-react';
+import { Download, FileSpreadsheet, Eye } from 'lucide-react';
 import { useChecklist } from '@/context/ChecklistContext';
 import { exportEmployeeTasksToExcel, exportMultipleEmployeesTasks, EmployeeTaskExport } from '@/utils/excelExport';
 import { toast } from '@/hooks/use-toast';
@@ -71,6 +72,7 @@ const managers = [
 const currentManager = "Sarah Miller";
 
 const Employees: React.FC = () => {
+  const navigate = useNavigate();
   const { currentRole, checklist } = useChecklist();
   
   // Filter employees based on role and current manager
@@ -139,6 +141,10 @@ const Employees: React.FC = () => {
         duration: 4000,
       });
     }
+  };
+
+  const handleViewChecklist = (employeeId: string) => {
+    navigate(`/employees/${employeeId}/checklist`);
   };
 
   return (
@@ -284,7 +290,15 @@ const Employees: React.FC = () => {
                         <Download className="h-3 w-3" />
                         Export
                       </Button>
-                      <Button variant="outline" size="sm">View Checklist</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleViewChecklist(employee.id)}
+                        className="flex items-center gap-1"
+                      >
+                        <Eye className="h-3 w-3" />
+                        View Checklist
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>

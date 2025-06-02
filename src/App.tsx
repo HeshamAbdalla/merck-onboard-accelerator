@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Employees from "./pages/Employees";
+import EmployeeChecklist from "./pages/EmployeeChecklist";
 import Templates from "./pages/Templates";
 import AppLayout from "./components/layout/AppLayout";
 
@@ -23,6 +24,11 @@ const App = () => (
           <Route path="/employees" element={
             <AppLayout>
               <Employees />
+            </AppLayout>
+          } />
+          <Route path="/employees/:employeeId/checklist" element={
+            <AppLayout>
+              <EmployeeChecklist />
             </AppLayout>
           } />
           <Route path="/templates" element={
