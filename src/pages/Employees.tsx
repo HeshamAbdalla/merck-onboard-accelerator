@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +6,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Download, FileSpreadsheet } from 'lucide-react';
 import { useChecklist } from '@/context/ChecklistContext';
+import { exportEmployeeTasksToExcel, exportMultipleEmployeesTasks, EmployeeTaskExport } from '@/utils/excelExport';
+import { toast } from '@/hooks/use-toast';
 
 // Extended mock employees data with manager information
 const employees = [
@@ -69,7 +71,7 @@ const managers = [
 const currentManager = "Sarah Miller";
 
 const Employees: React.FC = () => {
-  const { currentRole } = useChecklist();
+  const { currentRole, checklist } = useChecklist();
   
   // Filter employees based on role and current manager
   const filteredEmployees = React.useMemo(() => {
@@ -80,6 +82,64 @@ const Employees: React.FC = () => {
     }
     return employees; // Default fallback
   }, [currentRole]);
+
+  const handleExportSingleEmployee = (employee: typeof employees[0]) => {
+    try {
+      const employeeTaskData: EmployeeTaskExport = {
+        employeeId: employee.id,
+        employeeName: employee.name,
+        position: employee.position,
+        startDate: employee.startDate,
+        manager: employee.manager,
+        tasks: checklist // Using the full checklist as mock data for tasks
+      };
+
+      const filename = exportEmployeeTasksToExcel(employeeTaskData);
+      
+      toast({
+        title: "Export Successful",
+        description: `${employee.name}'s tasks exported to ${filename}`,
+        duration: 4000,
+      });
+    } catch (error) {
+      console.error('Export failed:', error);
+      toast({
+        title: "Export Failed",
+        description: "There was an error exporting the tasks. Please try again.",
+        variant: "destructive",
+        duration: 4000,
+      });
+    }
+  };
+
+  const handleExportAllEmployees = () => {
+    try {
+      const allEmployeesData: EmployeeTaskExport[] = filteredEmployees.map(emp => ({
+        employeeId: emp.id,
+        employeeName: emp.name,
+        position: emp.position,
+        startDate: emp.startDate,
+        manager: emp.manager,
+        tasks: checklist // Using the full checklist as mock data for tasks
+      }));
+
+      const filename = exportMultipleEmployeesTasks(allEmployeesData);
+      
+      toast({
+        title: "Bulk Export Successful",
+        description: `All employee tasks exported to ${filename}`,
+        duration: 4000,
+      });
+    } catch (error) {
+      console.error('Bulk export failed:', error);
+      toast({
+        title: "Export Failed",
+        description: "There was an error exporting all tasks. Please try again.",
+        variant: "destructive",
+        duration: 4000,
+      });
+    }
+  };
 
   return (
     <div>
@@ -92,7 +152,17 @@ const Employees: React.FC = () => {
             <p className="text-gray-500">Manage onboarding progress across all teams</p>
           )}
         </div>
-        <Button className="mt-4 md:mt-0">Add New Employee</Button>
+        <div className="flex gap-2 mt-4 md:mt-0">
+          <Button
+            variant="outline"
+            onClick={handleExportAllEmployees}
+            className="flex items-center gap-2"
+          >
+            <FileSpreadsheet className="h-4 w-4" />
+            Export All Tasks
+          </Button>
+          <Button>Add New Employee</Button>
+        </div>
       </div>
 
       <Card className="mb-6">
@@ -204,7 +274,18 @@ const Employees: React.FC = () => {
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="outline" size="sm">View Checklist</Button>
+                    <div className="flex gap-2 justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleExportSingleEmployee(employee)}
+                        className="flex items-center gap-1"
+                      >
+                        <Download className="h-3 w-3" />
+                        Export
+                      </Button>
+                      <Button variant="outline" size="sm">View Checklist</Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
