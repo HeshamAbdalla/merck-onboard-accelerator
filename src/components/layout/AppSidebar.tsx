@@ -1,19 +1,24 @@
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useChecklist } from '@/context/ChecklistContext';
 import { Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { Button } from '@/components/ui/button';
 import { 
   CheckSquare, 
   Users, 
   FileText,
-  Settings
+  LogOut
 } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { UserRole } from '@/types/checklist';
 
 const AppSidebar = () => {
   const { currentRole, setCurrentRole } = useChecklist();
+  const navigate = useNavigate();
+
+  const handleRoleChange = () => {
+    setCurrentRole('Manager'); // Reset to default
+    navigate('/');
+  };
 
   return (
     <Sidebar className="bg-white border-r border-gray-100 shadow-sm">
@@ -26,27 +31,16 @@ const AppSidebar = () => {
             <h2 className="text-xl font-bold text-merck-primary-dark font-intervention">Merck Onboarding</h2>
           </div>
           
-          <div className="mb-6">
-            <Select
-              value={currentRole}
-              onValueChange={(value: UserRole) => setCurrentRole(value)}
-            >
-              <SelectTrigger className="w-full border-merck-primary/30 focus:ring-merck-primary/50 rounded-sm">
-                <SelectValue placeholder="Select role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Manager">Manager</SelectItem>
-                <SelectItem value="HR Admin">HR Admin</SelectItem>
-                <SelectItem value="Buddy">Buddy</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="mb-6 p-3 bg-merck-primary/5 rounded-sm">
+            <div className="text-sm text-gray-600 mb-1">Current Role</div>
+            <div className="font-medium text-merck-primary-dark">{currentRole}</div>
           </div>
           
           <h3 className="text-xs uppercase text-gray-500 font-medium mb-3 tracking-wider font-intervention">Main Navigation</h3>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <NavLink to="/" className={({ isActive }) => 
+                <NavLink to="/dashboard" className={({ isActive }) => 
                   `flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium ${
                     isActive ? 'bg-merck-primary text-white' : 'hover:bg-merck-primary/5 text-gray-700'
                   }`
@@ -81,6 +75,18 @@ const AppSidebar = () => {
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
+          
+          {/* Role Change Button */}
+          <div className="mt-6 pt-4 border-t border-gray-100">
+            <Button
+              variant="ghost"
+              onClick={handleRoleChange}
+              className="w-full justify-start text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Change Role
+            </Button>
+          </div>
           
           {/* Merck.com-inspired footer */}
           <div className="absolute bottom-4 left-0 right-0 px-3">

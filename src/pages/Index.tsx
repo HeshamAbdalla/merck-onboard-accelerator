@@ -1,14 +1,9 @@
 
 import React from 'react';
-import AppLayout from '@/components/layout/AppLayout';
-import Dashboard from './Dashboard';
+import { Navigate } from 'react-router-dom';
 
 const Index: React.FC = () => {
-  return (
-    <AppLayout>
-      <Dashboard />
-    </AppLayout>
-  );
+  return <Navigate to="/dashboard" replace />;
 };
 
 export default Index;
