@@ -10,6 +10,11 @@ import ChecklistSection from '@/components/checklist/ChecklistSection';
 import NotificationCenter from '@/components/notifications/NotificationCenter';
 import OverdueAlerts from '@/components/alerts/OverdueAlerts';
 import WelcomeEmailGenerator from '@/components/email/WelcomeEmailGenerator';
+import ViewModeSelector from '@/components/views/ViewModeSelector';
+import CalendarView from '@/components/calendar/CalendarView';
+import TimelineView from '@/components/timeline/TimelineView';
+import ProgressDashboard from '@/components/progress/ProgressDashboard';
+import MilestoneManager from '@/components/milestones/MilestoneManager';
 import { useChecklist } from '@/context/ChecklistContext';
 import { Phase } from '@/types/checklist';
 
@@ -73,7 +78,13 @@ const EmployeeChecklist: React.FC = () => {
     notifications,
     markNotificationAsRead,
     markAllNotificationsAsRead,
-    clearAllNotifications
+    clearAllNotifications,
+    milestones,
+    addMilestone,
+    updateMilestone,
+    deleteMilestone,
+    currentView,
+    setCurrentView
   } = useChecklist();
 
   const employee = employees.find(emp => emp.id === employeeId);
@@ -119,6 +130,83 @@ const EmployeeChecklist: React.FC = () => {
   const totalTasks = checklist.length;
   const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
+  // Calculate timeline dates (6 months from start date)
+  const startDate = employee.startDate;
+  const endDate = new Date(startDate);
+  endDate.setMonth(endDate.getMonth() + 6);
+
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'calendar':
+        return (
+          <CalendarView
+            tasks={filteredChecklist}
+            milestones={milestones}
+            onTaskClick={(taskId) => {
+              const element = document.getElementById(`task-${taskId}`);
+              element?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          />
+        );
+      case 'timeline':
+        return (
+          <TimelineView
+            tasks={filteredChecklist}
+            milestones={milestones}
+            startDate={startDate}
+            endDate={endDate.toISOString()}
+            onTaskClick={(taskId) => {
+              const element = document.getElementById(`task-${taskId}`);
+              element?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          />
+        );
+      case 'gantt':
+        return (
+          <div className="space-y-6">
+            <ProgressDashboard
+              tasks={checklist}
+              milestones={milestones}
+              startDate={startDate}
+            />
+            <MilestoneManager
+              milestones={milestones}
+              tasks={checklist}
+              onAddMilestone={addMilestone}
+              onUpdateMilestone={updateMilestone}
+              onDeleteMilestone={deleteMilestone}
+            />
+          </div>
+        );
+      default:
+        return (
+          <>
+            {/* Filters */}
+            <ChecklistFilter />
+
+            {/* Checklist Sections */}
+            <div className="space-y-6">
+              {phases.map(phase => (
+                <ChecklistSection 
+                  key={phase} 
+                  phase={phase} 
+                  items={groupedItems[phase] || []} 
+                />
+              ))}
+            </div>
+
+            {filteredChecklist.length === 0 && (
+              <Card className="text-center py-8">
+                <CardContent>
+                  <p className="text-gray-500">No tasks match your current filters.</p>
+                </CardContent>
+              </Card>
+            )}
+          </>
+        );
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
@@ -140,6 +228,7 @@ const EmployeeChecklist: React.FC = () => {
           <p className="text-gray-500">Track and manage onboarding progress</p>
         </div>
         <div className="flex items-center gap-2">
+          <ViewModeSelector currentView={currentView} onViewChange={setCurrentView} />
           <WelcomeEmailGenerator 
             employeeData={{
               employeeName: employee.name,
@@ -218,27 +307,8 @@ const EmployeeChecklist: React.FC = () => {
         }}
       />
 
-      {/* Filters */}
-      <ChecklistFilter />
-
-      {/* Checklist Sections */}
-      <div className="space-y-6">
-        {phases.map(phase => (
-          <ChecklistSection 
-            key={phase} 
-            phase={phase} 
-            items={groupedItems[phase] || []} 
-          />
-        ))}
-      </div>
-
-      {filteredChecklist.length === 0 && (
-        <Card className="text-center py-8">
-          <CardContent>
-            <p className="text-gray-500">No tasks match your current filters.</p>
-          </CardContent>
-        </Card>
-      )}
+      {/* Render Current View */}
+      {renderCurrentView()}
     </div>
   );
 };

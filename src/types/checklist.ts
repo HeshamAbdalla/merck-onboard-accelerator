@@ -24,7 +24,15 @@ export type DueDate =
   | 'Month 1'
   | 'Month 2'
   | 'Month 3'
-  | 'Month 6';
+  | 'Month 6'
+  | 'Month 9'
+  | 'Month 12';
+
+export type ViewMode = 
+  | 'checklist'
+  | 'calendar'
+  | 'timeline'
+  | 'gantt';
 
 export type ChecklistItem = {
   id: string;
@@ -45,6 +53,45 @@ export type ChecklistItem = {
   estimatedHours?: number;
   isTemplate?: boolean;
   templateCategory?: string;
+  completedDate?: string;
+  startDate?: string;
+  milestoneId?: string;
+};
+
+export type Milestone = {
+  id: string;
+  title: string;
+  description: string;
+  targetDate: string;
+  phase: Phase;
+  type: 'critical' | 'important' | 'optional';
+  color: string;
+  tasks: string[];
+  completed: boolean;
+  completedDate?: string;
+};
+
+export type ProgressMetrics = {
+  totalTasks: number;
+  completedTasks: number;
+  overdueTasks: number;
+  upcomingTasks: number;
+  completionPercentage: number;
+  estimatedCompletionDate?: string;
+  timeToCompletion?: number;
+  phaseProgress: Record<Phase, number>;
+  milestoneProgress: Record<string, boolean>;
+};
+
+export type CalendarEvent = {
+  id: string;
+  title: string;
+  date: string;
+  type: 'task' | 'milestone' | 'deadline';
+  priority?: 'Low' | 'Medium' | 'High' | 'Critical';
+  completed: boolean;
+  taskId?: string;
+  milestoneId?: string;
 };
 
 export type UserRole = 'Manager' | 'HR Admin' | 'Buddy';

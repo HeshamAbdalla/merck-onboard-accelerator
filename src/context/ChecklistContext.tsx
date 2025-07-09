@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { ChecklistItem, UserRole, Notification, NotificationType } from '../types/checklist';
+import { ChecklistItem, UserRole, Notification, NotificationType, Milestone, ViewMode } from '../types/checklist';
 import { initialChecklistData } from '../data/checklistData';
 import { toast } from '@/hooks/use-toast';
 import { sortTasksByCriticalPath } from '../utils/taskReordering';
@@ -26,6 +26,14 @@ interface ChecklistContextType {
   markNotificationAsRead: (id: string) => void;
   markAllNotificationsAsRead: () => void;
   clearAllNotifications: () => void;
+  // New milestone functionality
+  milestones: Milestone[];
+  addMilestone: (milestone: Omit<Milestone, 'id'>) => void;
+  updateMilestone: (id: string, updates: Partial<Milestone>) => void;
+  deleteMilestone: (id: string) => void;
+  // View mode
+  currentView: ViewMode;
+  setCurrentView: React.Dispatch<React.SetStateAction<ViewMode>>;
 }
 
 const ChecklistContext = createContext<ChecklistContextType | undefined>(undefined);
@@ -38,11 +46,17 @@ export const ChecklistProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [searchQuery, setSearchQuery] = useState('');
   const [sortByCriticalPath, setSortByCriticalPath] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [currentView, setCurrentView] = useState<ViewMode>('checklist');
 
   const toggleItemCompletion = (id: string) => {
     setChecklist(prevList =>
       prevList.map(item =>
-        item.id === id ? { ...item, completed: !item.completed } : item
+        item.id === id ? { 
+          ...item, 
+          completed: !item.completed,
+          completedDate: !item.completed ? new Date().toISOString() : undefined
+        } : item
       )
     );
     
@@ -94,6 +108,46 @@ export const ChecklistProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     toast({
       title: "Task removed",
       description: "The task has been removed from the checklist.",
+      duration: 3000,
+    });
+  };
+
+  // Milestone functions
+  const addMilestone = (milestone: Omit<Milestone, 'id'>) => {
+    const newMilestone = {
+      ...milestone,
+      id: `milestone-${Date.now()}`
+    };
+    
+    setMilestones(prev => [...prev, newMilestone]);
+    
+    toast({
+      title: "Milestone added",
+      description: "New milestone has been created.",
+      duration: 3000,
+    });
+  };
+
+  const updateMilestone = (id: string, updates: Partial<Milestone>) => {
+    setMilestones(prev =>
+      prev.map(milestone =>
+        milestone.id === id ? { ...milestone, ...updates } : milestone
+      )
+    );
+    
+    toast({
+      title: "Milestone updated",
+      description: "The milestone has been updated.",
+      duration: 3000,
+    });
+  };
+
+  const deleteMilestone = (id: string) => {
+    setMilestones(prev => prev.filter(milestone => milestone.id !== id));
+    
+    toast({
+      title: "Milestone deleted",
+      description: "The milestone has been removed.",
       duration: 3000,
     });
   };
@@ -194,7 +248,13 @@ export const ChecklistProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         addNotification,
         markNotificationAsRead,
         markAllNotificationsAsRead,
-        clearAllNotifications
+        clearAllNotifications,
+        milestones,
+        addMilestone,
+        updateMilestone,
+        deleteMilestone,
+        currentView,
+        setCurrentView
       }}
     >
       {children}
