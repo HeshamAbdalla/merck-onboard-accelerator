@@ -1,8 +1,9 @@
 
-import React, { createContext, useContext, useState } from 'react';
-import { ChecklistItem, UserRole } from '../types/checklist';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { ChecklistItem, UserRole, Notification, NotificationType } from '../types/checklist';
 import { initialChecklistData } from '../data/checklistData';
 import { toast } from '@/hooks/use-toast';
+import { sortTasksByCriticalPath } from '../utils/taskReordering';
 
 interface ChecklistContextType {
   checklist: ChecklistItem[];
@@ -18,6 +19,13 @@ interface ChecklistContextType {
   setFilteredOwners: React.Dispatch<React.SetStateAction<string[]>>;
   searchQuery: string;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  sortByCriticalPath: boolean;
+  setSortByCriticalPath: React.Dispatch<React.SetStateAction<boolean>>;
+  notifications: Notification[];
+  addNotification: (notification: Omit<Notification, 'id' | 'timestamp'>) => void;
+  markNotificationAsRead: (id: string) => void;
+  markAllNotificationsAsRead: () => void;
+  clearAllNotifications: () => void;
 }
 
 const ChecklistContext = createContext<ChecklistContextType | undefined>(undefined);
@@ -28,6 +36,8 @@ export const ChecklistProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [filteredPhases, setFilteredPhases] = useState<string[]>([]);
   const [filteredOwners, setFilteredOwners] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortByCriticalPath, setSortByCriticalPath] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const toggleItemCompletion = (id: string) => {
     setChecklist(prevList =>
@@ -88,10 +98,84 @@ export const ChecklistProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     });
   };
 
+  // Notification functions
+  const addNotification = (notification: Omit<Notification, 'id' | 'timestamp'>) => {
+    const newNotification: Notification = {
+      ...notification,
+      id: `notification-${Date.now()}`,
+      timestamp: new Date(),
+    };
+    
+    setNotifications(prev => [newNotification, ...prev]);
+  };
+
+  const markNotificationAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id 
+          ? { ...notification, read: true }
+          : notification
+      )
+    );
+  };
+
+  const markAllNotificationsAsRead = () => {
+    setNotifications(prev => 
+      prev.map(notification => ({ ...notification, read: true }))
+    );
+  };
+
+  const clearAllNotifications = () => {
+    setNotifications([]);
+  };
+
+  // Auto-generate notifications for overdue and pending tasks
+  useEffect(() => {
+    const checkOverdueTasks = () => {
+      const now = new Date();
+      checklist.forEach(task => {
+        if (!task.completed && task.actualDueDate) {
+          const dueDate = new Date(task.actualDueDate);
+          const isOverdue = now > dueDate;
+          const daysDiff = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+          
+          // Check if we already have a notification for this task
+          const existingNotification = notifications.find(
+            n => n.taskId === task.id && (n.type === 'overdue' || n.type === 'pending')
+          );
+          
+          if (isOverdue && !existingNotification) {
+            addNotification({
+              type: 'overdue',
+              title: 'Task Overdue',
+              message: `"${task.title}" is overdue and needs immediate attention.`,
+              read: false,
+              taskId: task.id
+            });
+          } else if (daysDiff <= 3 && daysDiff >= 0 && !existingNotification) {
+            addNotification({
+              type: 'pending',
+              title: 'Upcoming Deadline',
+              message: `"${task.title}" is due in ${daysDiff} day${daysDiff !== 1 ? 's' : ''}.`,
+              read: false,
+              taskId: task.id
+            });
+          }
+        }
+      });
+    };
+
+    // Check immediately and then every hour
+    checkOverdueTasks();
+    const interval = setInterval(checkOverdueTasks, 60 * 60 * 1000);
+    
+    return () => clearInterval(interval);
+  }, [checklist, notifications]);
+
   return (
     <ChecklistContext.Provider
       value={{
-        checklist,
+        checklist: sortByCriticalPath ? sortTasksByCriticalPath(checklist) : checklist,
         currentRole,
         setCurrentRole,
         toggleItemCompletion,
@@ -103,7 +187,14 @@ export const ChecklistProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         filteredOwners, 
         setFilteredOwners,
         searchQuery,
-        setSearchQuery
+        setSearchQuery,
+        sortByCriticalPath,
+        setSortByCriticalPath,
+        notifications,
+        addNotification,
+        markNotificationAsRead,
+        markAllNotificationsAsRead,
+        clearAllNotifications
       }}
     >
       {children}

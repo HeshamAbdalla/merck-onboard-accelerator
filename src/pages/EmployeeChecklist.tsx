@@ -7,6 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, User, Calendar, UserCheck } from 'lucide-react';
 import ChecklistFilter from '@/components/checklist/ChecklistFilter';
 import ChecklistSection from '@/components/checklist/ChecklistSection';
+import NotificationCenter from '@/components/notifications/NotificationCenter';
+import OverdueAlerts from '@/components/alerts/OverdueAlerts';
+import WelcomeEmailGenerator from '@/components/email/WelcomeEmailGenerator';
 import { useChecklist } from '@/context/ChecklistContext';
 import { Phase } from '@/types/checklist';
 
@@ -62,7 +65,16 @@ const employees = [
 const EmployeeChecklist: React.FC = () => {
   const { employeeId } = useParams<{ employeeId: string }>();
   const navigate = useNavigate();
-  const { checklist, filteredPhases, filteredOwners, searchQuery } = useChecklist();
+  const { 
+    checklist, 
+    filteredPhases, 
+    filteredOwners, 
+    searchQuery,
+    notifications,
+    markNotificationAsRead,
+    markAllNotificationsAsRead,
+    clearAllNotifications
+  } = useChecklist();
 
   const employee = employees.find(emp => emp.id === employeeId);
 
@@ -127,6 +139,22 @@ const EmployeeChecklist: React.FC = () => {
           </div>
           <p className="text-gray-500">Track and manage onboarding progress</p>
         </div>
+        <div className="flex items-center gap-2">
+          <WelcomeEmailGenerator 
+            employeeData={{
+              employeeName: employee.name,
+              position: employee.position,
+              startDate: employee.startDate,
+              manager: employee.manager
+            }}
+          />
+          <NotificationCenter
+            notifications={notifications}
+            onMarkAsRead={markNotificationAsRead}
+            onMarkAllAsRead={markAllNotificationsAsRead}
+            onClearAll={clearAllNotifications}
+          />
+        </div>
       </div>
 
       {/* Employee Info Card */}
@@ -178,6 +206,17 @@ const EmployeeChecklist: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Overdue Alerts */}
+      <OverdueAlerts 
+        tasks={checklist} 
+        employeeName={employee.name}
+        onTaskClick={(taskId) => {
+          // Scroll to task or highlight it
+          const element = document.getElementById(`task-${taskId}`);
+          element?.scrollIntoView({ behavior: 'smooth' });
+        }}
+      />
 
       {/* Filters */}
       <ChecklistFilter />

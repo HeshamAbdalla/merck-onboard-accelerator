@@ -37,6 +37,41 @@ export type ChecklistItem = {
   comments: string;
   completed: boolean;
   attachments?: string[];
+  actualDueDate?: string;
+  isOverdue?: boolean;
+  isPending?: boolean;
+  priority?: 'Low' | 'Medium' | 'High' | 'Critical';
+  dependencies?: string[];
+  estimatedHours?: number;
+  isTemplate?: boolean;
+  templateCategory?: string;
 };
 
 export type UserRole = 'Manager' | 'HR Admin' | 'Buddy';
+
+export type NotificationType = 'overdue' | 'pending' | 'completed' | 'assigned' | 'reminder';
+
+export type Notification = {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+  taskId?: string;
+  employeeId?: string;
+};
+
+export type TaskTemplate = {
+  id: string;
+  title: string;
+  description: string;
+  phase: Phase;
+  owner: Owner;
+  responsibility: Responsibility;
+  suggestedDueDate: DueDate;
+  priority: 'Low' | 'Medium' | 'High' | 'Critical';
+  estimatedHours?: number;
+  category: string;
+  dependencies?: string[];
+};
