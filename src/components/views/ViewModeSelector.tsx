@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { List, Calendar, Timeline, BarChart3 } from 'lucide-react';
+import { List, Calendar, Clock, BarChart3 } from 'lucide-react';
 import { ViewMode } from '@/types/checklist';
 import { cn } from '@/lib/utils';
 
@@ -30,7 +30,7 @@ const ViewModeSelector: React.FC<ViewModeSelectorProps> = ({
     {
       mode: 'timeline' as ViewMode,
       label: 'Timeline',
-      icon: Timeline,
+      icon: Clock,
       description: 'Gantt chart timeline view'
     },
     {
