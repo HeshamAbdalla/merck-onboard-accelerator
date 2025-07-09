@@ -12,9 +12,9 @@ import {
   TrendingUp,
   Calendar
 } from 'lucide-react';
-import { ProgressDashboard } from '@/components/progress/ProgressDashboard';
-import { NotificationCenter } from '@/components/notifications/NotificationCenter';
-import { OverdueAlerts } from '@/components/alerts/OverdueAlerts';
+import ProgressDashboard from '@/components/progress/ProgressDashboard';
+import NotificationCenter from '@/components/notifications/NotificationCenter';
+import OverdueAlerts from '@/components/alerts/OverdueAlerts';
 
 const Dashboard: React.FC = () => {
   const { currentRole, checklist, notifications } = useChecklist();
@@ -156,16 +156,25 @@ const Dashboard: React.FC = () => {
 
       {/* Alerts */}
       {overdueTasks > 0 && (
-        <OverdueAlerts />
+        <OverdueAlerts tasks={checklist} />
       )}
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <ProgressDashboard />
+          <ProgressDashboard 
+            tasks={checklist} 
+            milestones={[]} 
+            startDate={new Date().toISOString()} 
+          />
         </div>
         <div>
-          <NotificationCenter />
+          <NotificationCenter 
+            notifications={notifications}
+            onMarkAsRead={() => {}}
+            onMarkAllAsRead={() => {}}
+            onClearAll={() => {}}
+          />
         </div>
       </div>
     </div>
